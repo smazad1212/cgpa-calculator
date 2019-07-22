@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 
+:root {
+  --primary: #1890FF;
+  --black: #3C454C;
+  --grey: #B0B9BF;
+  --light-grey: #EDEFF2;
+}
+
+html { font-size: 10px; }
+
 body {
   margin: 0;
   padding: 0;

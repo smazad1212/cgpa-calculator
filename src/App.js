@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-import './App.css'
+import Header from './components/Header/Header'
+import Main from './pages/Main/Main'
 
-import Header from './Components/Header'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="app">
-        <Header />
-      </div>
-    )
-  }
+const App = () => {
+  document.title = "CGPA Calculator"
+  return (
+    <div className="app">
+      <Header />
+      <Main />
+    </div>
+  )
 }
 
 export default App
