@@ -1,14 +1,15 @@
 import React from 'react'
 
-import SelectDropdown from '../../components/SelectDropdown/SelectDropdown'
+import UniversitySelector from '../../containers/UniversitySelector'
 
-import styles from './Main.module.css'
+import main from './Main.module.css'
 
 
 const Main = () => {
   return (
-    <div className={styles.main}>
-      <SelectDropdown />
+    <div className={main.container}>
+      <UniversitySelector />
+
     </div>
   )
 }

@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react'
 import { PageHeader } from 'antd'
 
-import styles from './Header.module.css'
+import header from './Header.module.css'
 
 
 class Header extends PureComponent {
   render() {
     return (
-      <PageHeader title='CGPA Calculator' className={styles.header} />
+      <PageHeader title='CGPA Calculator' className={header.container} />
     )
   }
 }

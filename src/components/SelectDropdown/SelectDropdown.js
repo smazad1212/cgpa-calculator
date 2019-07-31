@@ -1,28 +1,35 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { Select } from 'antd'
+
+import dropdown from './SelectDropdown.module.css'
 
 const { Option } = Select
 
-class SelectDropdown extends PureComponent {
-  state = {
-
-  }
-
-  handleChange = value => {
-    console.log("You selected:", value)
-  }
-
-  render() {
-    return (
-      <div>
-        <label>Select University</label>
-        <Select defaultValue="nsu" onChange={this.handleChange}>
-          <Option value="nsu">North South University</Option>
-          <Option value="brac" disabled>BRAC University</Option>
-        </Select>
-      </div>
-    )
-  }
+const SelectDropdown = (
+  {
+    label,
+    options = [],
+    defaultSelected,
+    onChange
+  }) => {
+  return (
+    <div>
+      <label className={dropdown.label}>{label}</label>
+      <Select defaultValue={defaultSelected} onChange={onChange}>
+        {
+          options.map((option, index) => (
+            <Option
+              key={index}
+              value={option.value}
+              disabled={option.disabled}
+            >
+              {option.name}
+            </Option>
+          ))
+        }
+      </Select>
+    </div>
+  )
 }
 
 export default SelectDropdown
