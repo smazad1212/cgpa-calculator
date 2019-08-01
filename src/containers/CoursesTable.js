@@ -42,20 +42,23 @@ class EditableCell extends Component {
     const { editing } = this.state
     return editing ? (
       <Form.Item style={{ margin: 0 }}>
-        {form.getFieldDecorator(dataIndex, {
-          rules: [
-            {
-              required: true,
-              message: `${title} is required.`,
-            },
-          ],
-          initialValue: record[dataIndex],
-        })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+        {
+          form.getFieldDecorator(dataIndex, {
+            // rules: [
+            //   {
+            //     required: true,
+            //     message: `${title} is required.`,
+            //   },
+            // ],
+            initialValue: record[dataIndex],
+          })
+          (<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)
+        }
       </Form.Item>
     ) : (
       <div
         className="editable-cell-value-wrap"
-        style={{ paddingRight: 24 }}
+        style={{ paddingRight: 24, height: 32 }}
         onClick={this.toggleEdit}
       >
         {children}
@@ -97,6 +100,7 @@ class EditableTable extends Component {
     {
       title: 'Credit',
       dataIndex: 'credit',
+      editable: true,
     },
     {
       title: 'Grade',
@@ -107,7 +111,7 @@ class EditableTable extends Component {
       dataIndex: 'point',
     },
     {
-      title: 'operation',
+      title: '',
       dataIndex: 'operation',
       // render: (text, record, index) => {
       //   return (
@@ -128,12 +132,12 @@ class EditableTable extends Component {
 
   state = {
     courses: [
-      // {
-      //   title: 'test data',
-      //   credit: null,
-      //   grade: null,
-      //   point: 0,
-      // },
+      {
+        title: 'test data',
+        credit: null,
+        grade: null,
+        point: 0,
+      },
       // {
       //   title: '',
       //   credit: null,
@@ -148,18 +152,18 @@ class EditableTable extends Component {
     this.setState({ courses: courses.filter((item, rowIndex) => rowIndex !== index) })
   }
 
-  // handleAdd = () => {
-  //   const { courses } = this.state
-  //   const newData = {
-  //     title: '',
-  //     credit: null,
-  //     grade: null,
-  //     point: 0,
-  //   }
-  //   this.setState({
-  //     courses: [...courses, newData],
-  //   })
-  // }
+  handleAdd = () => {
+    const { courses } = this.state
+    const newData = {
+      title: '',
+      credit: null,
+      grade: null,
+      point: 0,
+    }
+    this.setState({
+      courses: [...courses, newData],
+    })
+  }
 
   handleSave = (row, index) => {
     const newData = [...this.state.courses]
@@ -205,9 +209,9 @@ class EditableTable extends Component {
           columns={columns}
           pagination={false}
         />
-        {/*<Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>*/}
-        {/*  Add a row*/}
-        {/*</Button>*/}
+        <Button onClick={this.handleAdd} type="primary" style={{ marginTop: 16 }}>
+          Add a row
+        </Button>
       </div>
     )
   }

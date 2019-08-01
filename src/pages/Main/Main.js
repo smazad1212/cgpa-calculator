@@ -9,7 +9,7 @@ import main from './Main.module.css'
 const Main = () => {
   return (
     <div className={main.container}>
-      <UniversitySelector />
+      {/*<UniversitySelector />*/}
       <CoursesTable />
     </div>
   )
