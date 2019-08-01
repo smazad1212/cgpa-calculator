@@ -18,8 +18,8 @@ class UniversitySelector extends Component {
           value: 'nsu'
         },
         {
-          name: 'BRAC University',
-          value: 'brac',
+          name: 'Other',
+          value: 'other',
           disabled: true
         }
       ],
