@@ -1,6 +1,6 @@
 import React from 'react'
 
-import UniversitySelector from '../../containers/UniversitySelector'
+// import UniversitySelector from '../../containers/UniversitySelector'
 import CoursesTable from '../../containers/CoursesTable'
 
 import main from './Main.module.css'

@@ -1,0 +1,22 @@
+.editable-row:hover .editable-cell-value-wrap {
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+}
+
+.editable-row, .editable-row td {
+  position: relative;
+}
+
+.editable-cell-value-wrap {
+  height: 3.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.editable-row .ant-form-explain {
+  position: absolute;
+  font-size: 12px;
+  margin-top: -4px;
+}

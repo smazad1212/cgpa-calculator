@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { Table, Input, Button, Popconfirm, Form } from 'antd'
+import { Input, Button, Form, Popconfirm } from 'antd'
+
+import InputTable from '../components/InputTable/InputTable'
 
 const EditableContext = React.createContext()
 
@@ -39,17 +41,18 @@ class EditableCell extends Component {
   renderCell = form => {
     this.form = form
     const { children, dataIndex, record, title } = this.props
+    console.log(dataIndex)
     const { editing } = this.state
     return editing ? (
       <Form.Item style={{ margin: 0 }}>
         {
           form.getFieldDecorator(dataIndex, {
-            // rules: [
-            //   {
-            //     required: true,
-            //     message: `${title} is required.`,
-            //   },
-            // ],
+            rules: [
+              {
+                required: (dataIndex === 'credit') || (dataIndex === 'grade'),
+                message: `${title} is required.`,
+              },
+            ],
             initialValue: record[dataIndex],
           })
           (<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)
@@ -58,7 +61,6 @@ class EditableCell extends Component {
     ) : (
       <div
         className="editable-cell-value-wrap"
-        style={{ paddingRight: 24, height: 32 }}
         onClick={this.toggleEdit}
       >
         {children}
@@ -94,37 +96,43 @@ class EditableTable extends Component {
     {
       title: 'Course Title',
       dataIndex: 'title',
-      width: '40%',
+      width: '30%',
+      editable: true,
+    },
+    {
+      title: 'Course Code',
+      dataIndex: 'code',
+      width: '15%',
       editable: true,
     },
     {
       title: 'Credit',
       dataIndex: 'credit',
+      width: '15%',
       editable: true,
     },
     {
       title: 'Grade',
       dataIndex: 'grade',
+      width: '15%',
+      editable: true,
     },
     {
       title: 'Point',
       dataIndex: 'point',
+      width: '15%',
     },
     {
       title: '',
       dataIndex: 'operation',
-      // render: (text, record, index) => {
-      //   return (
-      //     this.state.courses.length >= 1 ? (
-      //       <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(index)}>
-      //         <a>Delete</a>
-      //       </Popconfirm>
-      //     ) : null
-      //   )
-      // }
+      width: '10%',
       render: (text, record, index) => {
         return (
-          <button onClick={() => this.handleDelete(index)}>x</button>
+          this.state.courses.length >= 1 ? (
+            <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(index)}>
+              <a>Delete</a>
+            </Popconfirm>
+          ) : null
         )
       }
     },
@@ -133,17 +141,12 @@ class EditableTable extends Component {
   state = {
     courses: [
       {
-        title: 'test data',
+        title: '',
+        code: '',
         credit: null,
         grade: null,
         point: 0,
       },
-      // {
-      //   title: '',
-      //   credit: null,
-      //   grade: null,
-      //   point: 0,
-      // },
     ],
   }
 
@@ -200,14 +203,10 @@ class EditableTable extends Component {
     })
     return (
       <div>
-        <Table
+        <InputTable
           components={components}
-          rowClassName={() => 'editable-row'}
-          rowKey={(record, index) => index}
-          bordered
           dataSource={courses}
           columns={columns}
-          pagination={false}
         />
         <Button onClick={this.handleAdd} type="primary" style={{ marginTop: 16 }}>
           Add a row
