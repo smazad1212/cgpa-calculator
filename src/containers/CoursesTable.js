@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Input, Button, Form, Popconfirm } from 'antd'
+import { Input, Form, Popconfirm, Button } from 'antd'
 
 import InputTable from '../components/InputTable/InputTable'
+import CustomButton from '../components/CustomButton/CustomButton'
 
 const EditableContext = React.createContext()
 
@@ -41,7 +42,6 @@ class EditableCell extends Component {
   renderCell = form => {
     this.form = form
     const { children, dataIndex, record, title } = this.props
-    console.log(dataIndex)
     const { editing } = this.state
     return editing ? (
       <Form.Item style={{ margin: 0 }}>
@@ -54,8 +54,8 @@ class EditableCell extends Component {
               },
             ],
             initialValue: record[dataIndex],
-          })
-          (<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)
+          })(
+            <Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)
         }
       </Form.Item>
     ) : (
@@ -96,7 +96,7 @@ class EditableTable extends Component {
     {
       title: 'Course Title',
       dataIndex: 'title',
-      width: '30%',
+      width: '35%',
       editable: true,
     },
     {
@@ -108,19 +108,24 @@ class EditableTable extends Component {
     {
       title: 'Credit',
       dataIndex: 'credit',
-      width: '15%',
+      width: '10%',
       editable: true,
     },
     {
       title: 'Grade',
       dataIndex: 'grade',
-      width: '15%',
+      width: '10%',
       editable: true,
     },
     {
-      title: 'Point',
+      title: 'Grade Point',
       dataIndex: 'point',
-      width: '15%',
+      width: '10%',
+    },
+    {
+      title: 'GPA',
+      dataIndex: 'gpa',
+      width: '10%',
     },
     {
       title: '',
@@ -130,7 +135,7 @@ class EditableTable extends Component {
         return (
           this.state.courses.length >= 1 ? (
             <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(index)}>
-              <a>Delete</a>
+              <Button type="link">Delete</Button>
             </Popconfirm>
           ) : null
         )
@@ -143,9 +148,10 @@ class EditableTable extends Component {
       {
         title: '',
         code: '',
-        credit: null,
-        grade: null,
-        point: 0,
+        credit: '',
+        grade: '',
+        point: '',
+        gpa: 0
       },
     ],
   }
@@ -208,9 +214,9 @@ class EditableTable extends Component {
           dataSource={courses}
           columns={columns}
         />
-        <Button onClick={this.handleAdd} type="primary" style={{ marginTop: 16 }}>
+        <CustomButton onClick={this.handleAdd}>
           Add a row
-        </Button>
+        </CustomButton>
       </div>
     )
   }

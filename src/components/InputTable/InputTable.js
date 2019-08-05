@@ -12,6 +12,7 @@ const InputTable = (
   }) => {
   return (
     <Table
+      style={{marginBottom: 16}}
       components={components}
       rowClassName={() => 'editable-row'}
       rowKey={(record, index) => index}
