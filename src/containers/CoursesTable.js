@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Input, Button, Form, Popconfirm } from 'antd'
 
 import InputTable from '../components/InputTable/InputTable'
+import SelectDropdown from '../components/SelectDropdown/SelectDropdown'
+import GRADES from '../constants/Grades'
 
 const EditableContext = React.createContext()
 
@@ -41,8 +43,14 @@ class EditableCell extends Component {
   renderCell = form => {
     this.form = form
     const { children, dataIndex, record, title } = this.props
-    console.log(dataIndex)
     const { editing } = this.state
+    if (dataIndex === 'grade') {
+      return (
+        <SelectDropdown
+          options={GRADES}
+        />
+      )
+    }
     return editing ? (
       <Form.Item style={{ margin: 0 }}>
         {
@@ -54,8 +62,9 @@ class EditableCell extends Component {
               },
             ],
             initialValue: record[dataIndex],
-          })
-          (<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)
+          })(
+            <Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />
+          )
         }
       </Form.Item>
     ) : (
@@ -130,7 +139,7 @@ class EditableTable extends Component {
         return (
           this.state.courses.length >= 1 ? (
             <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(index)}>
-              <a>Delete</a>
+              <button onClick={() => false} >Delete</button>
             </Popconfirm>
           ) : null
         )
