@@ -160,6 +160,13 @@ class EditableTable extends Component {
     ],
   }
 
+  componentDidMount() {
+    let courses = JSON.parse(localStorage.getItem('courses') || '[]')
+    if (courses.length) {
+      this.setState({ courses })
+    }
+  }
+
   handleDelete = index => {
     const courses = [...this.state.courses]
     this.setState({ courses: courses.filter((item, rowIndex) => rowIndex !== index) })
@@ -180,12 +187,15 @@ class EditableTable extends Component {
 
   handleSave = (row, index) => {
     const newData = [...this.state.courses]
+    console.log('row', row)
+    console.log('index', index)
     const item = newData[index]
     newData.splice(index, 1, {
       ...item,
       ...row,
     })
     this.setState({ courses: newData })
+    localStorage.setItem('courses', JSON.stringify(newData))
   }
 
   render() {
