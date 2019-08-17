@@ -8,14 +8,14 @@ const { Option } = Select
 const SelectDropdown = (
   {
     label,
-    options = [],
+    options = [], // array of objects { name: string, value: string }
     defaultSelected,
     onChange
   }) => {
   return (
     <div>
-      <label className={dropdown.label}>{label}</label>
-      <Select defaultValue={defaultSelected} onChange={onChange}>
+      <label>{label}</label>
+      <Select className={dropdown.select} defaultValue={defaultSelected} onChange={onChange}>
         {
           options.map((option, index) => (
             <Option

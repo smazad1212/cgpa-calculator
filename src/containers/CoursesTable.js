@@ -3,6 +3,8 @@ import { Input, Form, Popconfirm, Button } from 'antd'
 
 import InputTable from '../components/InputTable/InputTable'
 import CustomButton from '../components/CustomButton/CustomButton'
+import SelectDropdown from '../components/SelectDropdown/SelectDropdown'
+import GRADES from '../constants/Grades'
 
 const EditableContext = React.createContext()
 
@@ -43,6 +45,13 @@ class EditableCell extends Component {
     this.form = form
     const { children, dataIndex, record, title } = this.props
     const { editing } = this.state
+    if (dataIndex === 'grade') {
+      return (
+        <SelectDropdown
+          options={GRADES}
+        />
+      )
+    }
     return editing ? (
       <Form.Item style={{ margin: 0 }}>
         {
@@ -55,7 +64,8 @@ class EditableCell extends Component {
             ],
             initialValue: record[dataIndex],
           })(
-            <Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)
+            <Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />
+          )
         }
       </Form.Item>
     ) : (
@@ -96,7 +106,7 @@ class EditableTable extends Component {
     {
       title: 'Course Title',
       dataIndex: 'title',
-      width: '35%',
+      width: '30%',
       editable: true,
     },
     {
@@ -108,24 +118,19 @@ class EditableTable extends Component {
     {
       title: 'Credit',
       dataIndex: 'credit',
-      width: '10%',
+      width: '15%',
       editable: true,
     },
     {
       title: 'Grade',
       dataIndex: 'grade',
-      width: '10%',
+      width: '15%',
       editable: true,
     },
     {
       title: 'Grade Point',
       dataIndex: 'point',
-      width: '10%',
-    },
-    {
-      title: 'GPA',
-      dataIndex: 'gpa',
-      width: '10%',
+      width: '15%',
     },
     {
       title: '',
@@ -148,10 +153,9 @@ class EditableTable extends Component {
       {
         title: '',
         code: '',
-        credit: '',
-        grade: '',
-        point: '',
-        gpa: 0
+        credit: null,
+        grade: null,
+        point: 0,
       },
     ],
   }
