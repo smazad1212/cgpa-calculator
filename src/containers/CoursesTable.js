@@ -6,114 +6,27 @@ import CustomButton from '../components/CustomButton/CustomButton'
 import SelectDropdown from '../components/SelectDropdown/SelectDropdown'
 import GRADES from '../constants/Grades'
 
-const EditableContext = React.createContext()
-
-const EditableRow = ({ form, index, ...props }) => (
-  <EditableContext.Provider value={form}>
-    <tr {...props} />
-  </EditableContext.Provider>
-)
-
-const EditableFormRow = Form.create()(EditableRow)
-
-class EditableCell extends Component {
-  state = {
-    editing: false,
-  }
-
-  toggleEdit = () => {
-    const editing = !this.state.editing
-    this.setState({ editing }, () => {
-      if (editing) {
-        this.input.focus()
-      }
-    })
-  }
-
-  save = e => {
-    const { record, handleSave } = this.props
-    this.form.validateFields((error, values) => {
-      if (error && error[e.currentTarget.id]) {
-        return
-      }
-      this.toggleEdit()
-      handleSave({ ...record, ...values })
-    })
-  }
-
-  renderCell = form => {
-    this.form = form
-    const { children, dataIndex, record, title } = this.props
-    const { editing } = this.state
-    if (dataIndex === 'grade') {
-      return (
-        <SelectDropdown
-          options={GRADES}
-        />
-      )
-    }
-    return editing ? (
-      <Form.Item style={{ margin: 0 }}>
-        {
-          form.getFieldDecorator(dataIndex, {
-            rules: [
-              {
-                required: (dataIndex === 'credit') || (dataIndex === 'grade'),
-                message: `${title} is required.`,
-              },
-            ],
-            initialValue: record[dataIndex],
-          })(
-            <Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />
-          )
-        }
-      </Form.Item>
-    ) : (
-      <div
-        className="editable-cell-value-wrap"
-        onClick={this.toggleEdit}
-      >
-        {children}
-      </div>
-    )
-  }
-
-  render() {
-    const {
-      editable,
-      dataIndex,
-      title,
-      record,
-      index,
-      handleSave,
-      children,
-      ...restProps
-    } = this.props
-    return (
-      <td {...restProps}>
-        {editable ? (
-          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-        ) : (
-          children
-        )}
-      </td>
-    )
-  }
-}
-
-class EditableTable extends Component {
+class CoursesTable extends Component {
   columns = [
     {
       title: 'Course Title',
       dataIndex: 'title',
       width: '30%',
-      editable: true,
+      render: (value, record, index) => {
+        return (
+          <Input onChange={e => this.handleChange(e.target.value, record, index, 'title')} value={value}/>
+        )
+      }
     },
     {
       title: 'Course Code',
       dataIndex: 'code',
       width: '15%',
-      editable: true,
+      render: (value, record, index) => {
+        return (
+          <Input onChange={e => this.handleChange(e.target.value, record, index, 'code')} value={value}/>
+        )
+      }
     },
     {
       title: 'Credit',
@@ -151,7 +64,7 @@ class EditableTable extends Component {
   state = {
     courses: [
       {
-        title: '',
+        title: 'qwe',
         code: '',
         credit: null,
         grade: null,
@@ -172,10 +85,21 @@ class EditableTable extends Component {
     this.setState({ courses: courses.filter((item, rowIndex) => rowIndex !== index) })
   }
 
+  handleChange = (value, record, index, property) => {
+    const newData = [...this.state.courses]
+    newData.splice(index, 1, {
+      ...record,
+      [property]: value
+    })
+    this.setState({ courses: newData }, () => {
+      localStorage.setItem('courses', JSON.stringify(this.state.courses))
+    })
+  }
   handleAdd = () => {
     const { courses } = this.state
     const newData = {
       title: '',
+      code: '',
       credit: null,
       grade: null,
       point: 0,
@@ -187,8 +111,6 @@ class EditableTable extends Component {
 
   handleSave = (row, index) => {
     const newData = [...this.state.courses]
-    console.log('row', row)
-    console.log('index', index)
     const item = newData[index]
     newData.splice(index, 1, {
       ...item,
@@ -200,33 +122,11 @@ class EditableTable extends Component {
 
   render() {
     const { courses } = this.state
-    const components = {
-      body: {
-        row: EditableFormRow,
-        cell: EditableCell,
-      },
-    }
-    const columns = this.columns.map(col => {
-      if (!col.editable) {
-        return col
-      }
-      return {
-        ...col,
-        onCell: (record, index) => ({
-          record,
-          editable: col.editable,
-          dataIndex: col.dataIndex,
-          title: col.title,
-          handleSave: (record) => this.handleSave(record, index),
-        }),
-      }
-    })
     return (
       <div>
         <InputTable
-          components={components}
           dataSource={courses}
-          columns={columns}
+          columns={this.columns}
         />
         <CustomButton onClick={this.handleAdd}>
           Add a row
@@ -236,4 +136,4 @@ class EditableTable extends Component {
   }
 }
 
-export default EditableTable
+export default CoursesTable
