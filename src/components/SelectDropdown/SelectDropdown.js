@@ -8,13 +8,15 @@ const { Option } = Select
 const SelectDropdown = (
   {
     label,
-    options = [], // array of objects { name: string, value: string }
+    options = [], // array of objects { label: string, value: string }
     defaultSelected,
     onChange
   }) => {
   return (
     <div>
-      <label>{label}</label>
+      {
+        label && <label>{label}</label>
+      }
       <Select className={dropdown.select} defaultValue={defaultSelected} onChange={onChange}>
         {
           options.map((option, index) => (
@@ -23,7 +25,7 @@ const SelectDropdown = (
               value={option.value}
               disabled={option.disabled}
             >
-              {option.name}
+              {option.label}
             </Option>
           ))
         }

@@ -5,6 +5,7 @@ import InputTable from '../components/InputTable/InputTable'
 import CustomButton from '../components/CustomButton/CustomButton'
 import SelectDropdown from '../components/SelectDropdown/SelectDropdown'
 import GRADES from '../constants/Grades'
+import CREDITS from '../constants/Credits'
 
 class CoursesTable extends Component {
   columns = [
@@ -14,7 +15,7 @@ class CoursesTable extends Component {
       width: '30%',
       render: (value, record, index) => {
         return (
-          <Input onChange={e => this.handleChange(e.target.value, record, index, 'title')} value={value}/>
+          <Input onChange={e => this.handleChange(e.target.value, record, index, 'title')} value={value} />
         )
       }
     },
@@ -24,7 +25,7 @@ class CoursesTable extends Component {
       width: '15%',
       render: (value, record, index) => {
         return (
-          <Input onChange={e => this.handleChange(e.target.value, record, index, 'code')} value={value}/>
+          <Input onChange={e => this.handleChange(e.target.value, record, index, 'code')} value={value} />
         )
       }
     },
@@ -32,18 +33,40 @@ class CoursesTable extends Component {
       title: 'Credit',
       dataIndex: 'credit',
       width: '15%',
-      editable: true,
+      render: (value, record, index) => {
+        return (
+          <SelectDropdown
+            options={CREDITS}
+            onChange={select => this.handleChange(select, record, index, 'credit')}
+            defaultSelected={value}
+          />
+        )
+      }
     },
     {
       title: 'Grade',
       dataIndex: 'grade',
       width: '15%',
-      editable: true,
+      render: (value, record, index) => {
+        return (
+          <SelectDropdown
+            options={GRADES}
+            onChange={select => this.handleChange(select, record, index, 'grade')}
+            defaultSelected={value}
+          />
+        )
+      }
     },
     {
       title: 'Grade Point',
       dataIndex: 'point',
       width: '15%',
+      render: (value, record, index) => {
+        console.log(record)
+        return (
+          <div>x</div>
+        )
+      }
     },
     {
       title: '',
@@ -95,6 +118,18 @@ class CoursesTable extends Component {
       localStorage.setItem('courses', JSON.stringify(this.state.courses))
     })
   }
+
+  handleGradeChange = (value, record, index) => {
+    const newData = [...this.state.courses]
+    newData.splice(index, 1, {
+      ...record,
+      grade: value,
+    })
+    this.setState({ courses: newData }, () => {
+      localStorage.setItem('courses', JSON.stringify(this.state.courses))
+    })
+  }
+
   handleAdd = () => {
     const { courses } = this.state
     const newData = {

@@ -1,66 +1,66 @@
 const GRADES = [
   {
-    name: 'A',
+    label: 'A',
     value: 'a',
     point: 4
   },
   {
-    name: 'A-',
+    label: 'A-',
     value: 'a-',
     point: 3.7
   },
   {
-    name: 'B+',
+    label: 'B+',
     value: 'b+',
     point: 3.3
   },
   {
-    name: 'B',
+    label: 'B',
     value: 'b',
     point: 3
   },
   {
-    name: 'B-',
+    label: 'B-',
     value: 'b-',
     point: 2.7
   },
   {
-    name: 'C+',
+    label: 'C+',
     value: 'c+',
     point: 2.3
   },
   {
-    name: 'C',
+    label: 'C',
     value: 'c',
     point: 2
   },
   {
-    name: 'C-',
+    label: 'C-',
     value: 'c-',
     point: 1.7
   },
   {
-    name: 'D+',
+    label: 'D+',
     value: 'd+',
     point: 1.3
   },
   {
-    name: 'D',
+    label: 'D',
     value: 'd',
     point: 1
   },
   {
-    name: 'F',
+    label: 'F',
     value: 'f',
     point: 0
   },
   {
-    name: 'I',
+    label: 'I',
     value: 'i',
     point: 0
   },
   {
-    name: 'W',
+    label: 'W',
     value: 'w',
     point: 0
   },
