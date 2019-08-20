@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Input, Form, Popconfirm, Button } from 'antd'
+import { Input, Popconfirm, Button, Spin } from 'antd'
 
 import InputTable from '../components/InputTable/InputTable'
 import CustomButton from '../components/CustomButton/CustomButton'
@@ -51,7 +51,7 @@ class CoursesTable extends Component {
         return (
           <SelectDropdown
             options={GRADES}
-            onChange={select => this.handleChange(select, record, index, 'grade')}
+            onChange={select => this.handleGradeChange(select, record, index)}
             defaultSelected={value}
           />
         )
@@ -61,12 +61,7 @@ class CoursesTable extends Component {
       title: 'Grade Point',
       dataIndex: 'point',
       width: '15%',
-      render: (value, record, index) => {
-        console.log(record)
-        return (
-          <div>x</div>
-        )
-      }
+      render: (value, record) => record.point
     },
     {
       title: '',
@@ -85,27 +80,40 @@ class CoursesTable extends Component {
   ]
 
   state = {
+    loading: true,
     courses: [
       {
-        title: 'qwe',
+        key: 1,
+        title: '',
         code: '',
         credit: null,
         grade: null,
-        point: 0,
+        point: null,
       },
     ],
+    count: 2
   }
 
   componentDidMount() {
     let courses = JSON.parse(localStorage.getItem('courses') || '[]')
     if (courses.length) {
-      this.setState({ courses })
+      this.setState({
+        courses,
+        count: courses[courses.length-1].key + 1,
+        loading: false
+      })
+    }
+    else {
+      this.setState({ loading: false })
     }
   }
 
-  handleDelete = index => {
-    const courses = [...this.state.courses]
-    this.setState({ courses: courses.filter((item, rowIndex) => rowIndex !== index) })
+  handleDelete = (index) => {
+    const newData = [...this.state.courses]
+    newData.splice(index, 1)
+    this.setState({ courses: newData }, () => {
+      localStorage.setItem('courses', JSON.stringify(this.state.courses))
+    })
   }
 
   handleChange = (value, record, index, property) => {
@@ -121,9 +129,12 @@ class CoursesTable extends Component {
 
   handleGradeChange = (value, record, index) => {
     const newData = [...this.state.courses]
+    const grade = value
+    const point = GRADES.find(data => data.value === grade).point
     newData.splice(index, 1, {
       ...record,
-      grade: value,
+      grade,
+      point
     })
     this.setState({ courses: newData }, () => {
       localStorage.setItem('courses', JSON.stringify(this.state.courses))
@@ -131,41 +142,51 @@ class CoursesTable extends Component {
   }
 
   handleAdd = () => {
-    const { courses } = this.state
+    const { courses, count } = this.state
     const newData = {
+      key: count,
       title: '',
       code: '',
       credit: null,
       grade: null,
-      point: 0,
+      point: null,
     }
     this.setState({
       courses: [...courses, newData],
+      count: count + 1
+    }, () => {
+      localStorage.setItem('courses', JSON.stringify(this.state.courses))
     })
   }
 
-  handleSave = (row, index) => {
-    const newData = [...this.state.courses]
-    const item = newData[index]
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    })
-    this.setState({ courses: newData })
-    localStorage.setItem('courses', JSON.stringify(newData))
+  getCgpa() {
+    let totalGradePoints = this.state.courses.reduce((total, course) => {
+      return total + (course.credit * course.point)
+    }, 0)
+    let totalCredits = this.state.courses.reduce((total, course) => {
+      if (course.point === null) {
+        return total + 0
+      }
+      return total + course.credit
+    }, 0)
+    if (totalCredits === 0) return 0
+    return (totalGradePoints/totalCredits).toFixed(2)
   }
 
   render() {
+    if (this.state.loading) return <Spin />
     const { courses } = this.state
     return (
       <div>
         <InputTable
           dataSource={courses}
           columns={this.columns}
+          rowKey={record => record.key}
         />
         <CustomButton onClick={this.handleAdd}>
           Add a row
         </CustomButton>
+        <h1>Your CGPA is: {this.getCgpa()}</h1>
       </div>
     )
   }
