@@ -59,9 +59,9 @@ class CoursesTable extends Component {
     },
     {
       title: 'Grade Point',
-      dataIndex: 'point',
+      dataIndex: 'gradePoint',
       width: '15%',
-      render: (value, record) => record.point
+      render: (value, record) => record.gradePoint
     },
     {
       title: '',
@@ -89,6 +89,7 @@ class CoursesTable extends Component {
         credit: null,
         grade: null,
         point: null,
+        gradePoint: null,
       },
     ],
     count: 2
@@ -120,7 +121,8 @@ class CoursesTable extends Component {
     const newData = [...this.state.courses]
     newData.splice(index, 1, {
       ...record,
-      [property]: value
+      [property]: value,
+      gradePoint: property === 'credit' ? parseFloat((value * record.point).toFixed(2)) : record.gradePoint
     })
     this.setState({ courses: newData }, () => {
       localStorage.setItem('courses', JSON.stringify(this.state.courses))
@@ -134,7 +136,8 @@ class CoursesTable extends Component {
     newData.splice(index, 1, {
       ...record,
       grade,
-      point
+      point,
+      gradePoint: parseFloat((point * record.credit).toFixed(2))
     })
     this.setState({ courses: newData }, () => {
       localStorage.setItem('courses', JSON.stringify(this.state.courses))
@@ -150,6 +153,7 @@ class CoursesTable extends Component {
       credit: null,
       grade: null,
       point: null,
+      gradePoint: null,
     }
     this.setState({
       courses: [...courses, newData],
@@ -161,7 +165,7 @@ class CoursesTable extends Component {
 
   getCgpa() {
     let totalGradePoints = this.state.courses.reduce((total, course) => {
-      return total + (course.credit * course.point)
+      return total + course.gradePoint
     }, 0)
     let totalCredits = this.state.courses.reduce((total, course) => {
       if (course.point === null) {
