@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table } from 'antd'
 
-import './InputTable.css'
+import table from './InputTable.module.css'
 
 
 const InputTable = (
@@ -13,9 +13,9 @@ const InputTable = (
   }) => {
   return (
     <Table
-      style={{marginBottom: 16}}
+      className={table.table}
+      rowClassName={table.tableRow}
       components={components}
-      rowClassName={() => 'editable-row'}
       rowKey={(record, index) => rowKey ? rowKey(record) : index}
       bordered
       dataSource={dataSource}

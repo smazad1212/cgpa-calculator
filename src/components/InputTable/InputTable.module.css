@@ -1,0 +1,16 @@
+@global-import 'ant-select', 'ant-select-selection--single';
+
+.table {
+  margin-bottom: 1.6rem;
+}
+
+.tableRow td input {
+  display: inline-flex;
+  height: inherit;
+  border: 0;
+}
+.tableRow :global .ant-select,
+.tableRow :global .ant-select-selection--single {
+  width: 100%;
+  border: 0;
+}
